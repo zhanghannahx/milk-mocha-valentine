@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Will You Be My Valentine?</title>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&family=Patrick+Hand&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'Quicksand', sans-serif;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: #FFF0F5;
+}
+
+.hearts-bg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.fh {
+  position: absolute;
+  opacity: 0.22;
+  animation: fhUp linear infinite;
+}
+
+@keyframes fhUp {
+  0% { transform: translateY(105vh) translateX(0) rotate(0deg); opacity: 0; }
+  8% { opacity: 0.22; }
+  92% { opacity: 0.22; }
+  100% { transform: translateY(-5vh) translateX(35px) rotate(360deg); opacity: 0; }
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem 1.5rem;
+}
+
+#askScreen {
+  text-align: center;
+  max-width: 460px;
+  width: 100%;
+  animation: bounceIn 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes bounceIn {
+  from { opacity: 0; transform: scale(0.75) translateY(24px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.bear-gif {
+  width: 260px;
+  height: 260px;
+  margin: 0 auto 1.5rem;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bear-gif img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  color: #FF1493;
+  margin-bottom: 0.3rem;
+  text-shadow: 1px 1px 0 rgba(255,20,147,0.12);
+}
+
+.sub {
+  font-size: clamp(0.85rem, 2.5vw, 1rem);
+  color: #B5838D;
+  margin-bottom: 2rem;
+  font-weight: 500;
+}
+
+.btn-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 90px;
+}
+
+.btn-yes {
+  background: linear-gradient(135deg, #FF69B4, #FF1493);
+  color: #fff;
+  border: none;
+  padding: 15px 44px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  box-shadow: 0 4px 18px rgba(255,20,147,0.25);
+}
+
+.btn-yes:hover {
+  box-shadow: 0 6px 28px rgba(255,20,147,0.4);
+  filter: brightness(1.06);
+}
+
+.btn-no {
+  background: #fff;
+  color: #B5838D;
+  border: 2px solid #E8C4C8;
+  padding: 13px 36px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-radius: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-no:hover { background: #FFF5F7; }
+
+.hint {
+  margin-top: 1rem;
+  font-size: 0.85rem;
+  color: #E8A0BF;
+  font-style: italic;
+  min-height: 1.3em;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.hint.show { opacity: 1; }
+
+.sad-bear {
+  margin-top: 1.2rem;
+  display: none;
+  animation: bounceIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.sad-bear.show { display: flex; align-items: center; justify-content: center; }
+
+.sad-bear img {
+  width: 180px;
+  max-height: 180px;
+  object-fit: contain;
+}
+
+#yayScreen {
+  display: none;
+  text-align: center;
+  max-width: 520px;
+  width: 100%;
+}
+
+#yayScreen.active {
+  display: block;
+  animation: bounceIn 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.yay-gif {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto 1.5rem;
+  border-radius: 24px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.yay-gif img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.yay-title {
+  font-family: 'Patrick Hand', cursive;
+  font-size: clamp(2.8rem, 9vw, 4.5rem);
+  color: #FF1493;
+  margin-bottom: 0.3rem;
+  text-shadow: 2px 2px 0 rgba(255,20,147,0.15);
+}
+
+.yay-sub {
+  font-size: 1.15rem;
+  color: #B5838D;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.love-note {
+  background: linear-gradient(135deg, rgba(255,182,193,0.25), rgba(255,240,245,0.7));
+  border: 2px solid rgba(255,182,193,0.35);
+  border-radius: 24px;
+  padding: 1.5rem 2rem;
+  margin-bottom: 2rem;
+}
+
+.love-note p {
+  font-family: 'Patrick Hand', cursive;
+  font-size: clamp(1.1rem, 3.5vw, 1.5rem);
+  color: #6D4C5E;
+  line-height: 1.6;
+}
+
+.hug-gif {
+  width: 240px;
+  height: 240px;
+  margin: 0 auto;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hug-gif img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.confetti-box {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  overflow: hidden;
+  display: none;
+}
+
+.confetti-box.go { display: block; }
+
+.cp {
+  position: absolute;
+  top: -14px;
+  animation: cpFall linear forwards;
+}
+
+@keyframes cpFall {
+  0% { transform: translateY(0) rotate(0); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+@media (max-width: 480px) {
+  .bear-gif { width: 210px; height: 210px; }
+  .yay-gif { width: 240px; height: 240px; }
+  .hug-gif { width: 190px; height: 190px; }
+  .btn-yes { padding: 13px 34px; font-size: 1.05rem; }
+  .btn-no { padding: 11px 28px; font-size: 0.95rem; }
+  .sad-bear img { width: 150px; max-height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<div class="hearts-bg" id="heartsBg"></div>
+<div class="confetti-box" id="confBox"></div>
+
+<div class="page">
+
+  <div id="askScreen">
+    <div class="bear-gif">
+      <img src="https://media4.giphy.com/media/kfRKF0iqA8jyDqq1nH/giphy.gif" alt="Milk bear with hearts">
+    </div>
+    <h1 class="title">Will you be my Valentine?</h1>
+    <p class="sub">Milk & Mocha want to know...</p>
+    <div class="btn-row">
+      <button class="btn-yes" id="yesBtn" onclick="sayYes()">Yes!</button>
+      <button class="btn-no" id="noBtn" onclick="clickNo()">No</button>
+    </div>
+    <p class="hint" id="hint"></p>
+    <div class="sad-bear" id="sadBear">
+      <img src="https://media2.giphy.com/media/L3iXjPw1GoEk0nioqY/giphy.gif" alt="Mocha bear angry and sweating">
+    </div>
+  </div>
+
+  <div id="yayScreen">
+    <div class="yay-gif">
+      <img src="https://media2.giphy.com/media/JoUoAzZEjEy9PrZ98N/giphy.gif" alt="Milk and Mocha bears happy with hearts">
+    </div>
+    <h1 class="yay-title">Yaaay!!!</h1>
+    <p class="yay-sub">Milk & Mocha are SO happy right now!</p>
+    <div class="love-note">
+      <p>Every day is Valentine's Day when Milk has Mocha and Mocha has Milk. Happy Valentine's Day!</p>
+    </div>
+    <div class="hug-gif">
+      <img src="https://media1.giphy.com/media/JRsQiAN79bPWUv43Ko/giphy.gif" alt="Milk bear dancing happily">
+    </div>
+  </div>
+
+</div>
+
+<script>
+var noCount = 0;
+var noBtn = document.getElementById('noBtn');
+var yesBtn = document.getElementById('yesBtn');
+var hint = document.getElementById('hint');
+var sadBear = document.getElementById('sadBear');
+
+var noTexts = [
+  "Are you sure?",
+  "Really really sure?",
+  "Think again!",
+  "Pretty please?",
+  "Milk is getting sad...",
+  "Mocha is crying now...",
+  "You're breaking their hearts!",
+  "Last chance!",
+  "Okay fine... YES!"
+];
+
+var hints = [
+  "hmm are you sure about that...",
+  "the bears are getting worried...",
+  "you're really gonna do this?",
+  "look how sad they are...",
+  "Mocha can't stop crying...",
+  "please... for the bears...",
+  "there's only one right answer...",
+  "just click yes already...",
+  ""
+];
+
+function clickNo() {
+  noCount++;
+  if (noCount >= noTexts.length) { sayYes(); return; }
+
+  noBtn.textContent = noTexts[noCount - 1];
+
+  var s = Math.max(0.2, 1 - noCount * 0.11);
+  var f = Math.max(0.4, 1.1 - noCount * 0.09);
+  var pv = Math.max(2, 13 - noCount * 1.6);
+  var ph = Math.max(6, 36 - noCount * 4.2);
+  noBtn.style.transform = 'scale(' + s + ')';
+  noBtn.style.fontSize = f + 'rem';
+  noBtn.style.padding = pv + 'px ' + ph + 'px';
+
+  var ys = 1 + noCount * 0.13;
+  yesBtn.style.transform = 'scale(' + ys + ')';
+
+  hint.textContent = hints[noCount - 1] || '';
+  hint.classList.toggle('show', !!(hints[noCount - 1]));
+
+  if (noCount >= 3) sadBear.classList.add('show');
+}
+
+function sayYes() {
+  document.getElementById('askScreen').style.display = 'none';
+  document.getElementById('yayScreen').classList.add('active');
+  boom();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function boom() {
+  var box = document.getElementById('confBox');
+  box.classList.add('go');
+  var cl = ['#FF69B4','#FFB6C1','#FF1493','#FFD700','#FF4D6D','#FFC0CB','#FF85A2','#E8A0BF'];
+  for (var i = 0; i < 100; i++) {
+    (function(i) {
+      setTimeout(function() {
+        var c = document.createElement('div');
+        c.className = 'cp';
+        c.style.left = Math.random() * 100 + '%';
+        c.style.background = cl[Math.floor(Math.random() * cl.length)];
+        c.style.width = (Math.random() * 8 + 5) + 'px';
+        c.style.height = (Math.random() * 8 + 5) + 'px';
+        c.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        c.style.animationDuration = (Math.random() * 2.5 + 1.5) + 's';
+        box.appendChild(c);
+        setTimeout(function() { c.remove(); }, 4500);
+      }, i * 25);
+    })(i);
+  }
+}
+
+(function() {
+  var bg = document.getElementById('heartsBg');
+  var hs = ['\u2764\uFE0F','\uD83D\uDC96','\uD83D\uDC97','\uD83D\uDC95'];
+  for (var i = 0; i < 16; i++) {
+    var d = document.createElement('div');
+    d.className = 'fh';
+    d.textContent = hs[Math.floor(Math.random() * hs.length)];
+    d.style.left = Math.random() * 100 + '%';
+    d.style.fontSize = (Math.random() * 12 + 10) + 'px';
+    d.style.animationDuration = (Math.random() * 10 + 10) + 's';
+    d.style.animationDelay = (Math.random() * 12) + 's';
+    bg.appendChild(d);
+  }
+})();
+</script>
+</body>
+</html>
